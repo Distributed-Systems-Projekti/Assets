@@ -36,6 +36,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     public GameObject PlayerListItemPrefab;
     public Transform PlayerListContent;
     public Button StartGameButton;
+    public TMP_Text RoomNameText;
 
     public void Awake()
     {
@@ -100,6 +101,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        RoomNameText.text = PhotonNetwork.CurrentRoom.Name;
         SetActivePanel(RoomPanel.name);
         foreach (Transform t in PlayerListContent)
         {
@@ -174,6 +176,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
     public void OnStartGameButtonClicked()
     {
+        
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
