@@ -41,7 +41,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     public void Awake()
     {
         Instance = this;
-        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = true; //This will synchronize all players states
     }
 
     public override void OnConnectedToMaster()
@@ -70,7 +70,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     public void JoinRoom(RoomInfo info)
     {
         SetActivePanel(LoadingPanel.name);
-        PhotonNetwork.JoinRoom(info.Name);
+        PhotonNetwork.JoinRoom(info.Name); // Here the client will tell server to join them in to room with specific name
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -89,7 +89,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
         RoomOptions options = new RoomOptions { MaxPlayers = 8 };
 
-        PhotonNetwork.CreateRoom(roomName, options, null);
+        PhotonNetwork.CreateRoom(roomName, options, null); // Here client create new room in to the server
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -101,14 +101,14 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        RoomNameText.text = PhotonNetwork.CurrentRoom.Name;
+        RoomNameText.text = PhotonNetwork.CurrentRoom.Name; // Here Client ask name of the current room
         SetActivePanel(RoomPanel.name);
         foreach (Transform t in PlayerListContent)
         {
             Destroy(t.gameObject);
         }
 
-        foreach (Player p in PhotonNetwork.PlayerList)
+        foreach (Player p in PhotonNetwork.PlayerList) // Client ask who else are in same room with  them
         {
             Instantiate(PlayerListItemPrefab, PlayerListContent)
                 .GetComponent<PlayerListItem>()
@@ -118,7 +118,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
     public void OnBackButtonClicked()
     {
-        if (PhotonNetwork.InLobby)
+        if (PhotonNetwork.InLobby) // Check if users state is "in-lobby"
         {
             PhotonNetwork.LeaveLobby();
         }
@@ -133,14 +133,14 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
         RoomOptions options = new RoomOptions { MaxPlayers = 8, PlayerTtl = 10000 };
 
-        PhotonNetwork.CreateRoom(roomName, options, null);
+        PhotonNetwork.CreateRoom(roomName, options, null); // Client creates room to the server
     }
 
     public void OnJoinRandomRoomButtonClicked()
     {
         SetActivePanel(LoadingPanel.name);
 
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinRandomRoom(); //Client joining to random room in the server
     }
 
     public void OnLeaveGameButtonClicked()
@@ -155,8 +155,8 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
         if (!playerName.Equals(""))
         {
-            PhotonNetwork.LocalPlayer.NickName = playerName;
-            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.LocalPlayer.NickName = playerName; // Client set their name to the server
+            PhotonNetwork.ConnectUsingSettings(); // Client connects to the server
         }
         else
         {
@@ -168,7 +168,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.InLobby)
         {
-            PhotonNetwork.JoinLobby();
+            PhotonNetwork.JoinLobby(); // Client join to the lobby in case they are not joined already
         }
 
         SetActivePanel(RoomsPanel.name);
@@ -177,10 +177,10 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     public void OnStartGameButtonClicked()
     {
         
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        PhotonNetwork.CurrentRoom.IsVisible = false;
+        PhotonNetwork.CurrentRoom.IsOpen = false; // Client tell server to prevent others to join to the room
+        PhotonNetwork.CurrentRoom.IsVisible = false; // Client tell server to prevent others to see the room
 
-        PhotonNetwork.LoadLevel("SampleScene");
+        PhotonNetwork.LoadLevel("SampleScene"); // Client tells game server to start the game.
     }
 
     public void OnCreateNewButtonClicked()

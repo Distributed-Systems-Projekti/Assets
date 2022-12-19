@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             playerPrefab.name,
             spawnPosition,
             Quaternion.identity
-        );
+        ); // Client will instantiate them self in to the game server
         camera.SetActive(true);
         camera.GetComponent<SmoothCameraFollow>().target = _player.transform;
 
